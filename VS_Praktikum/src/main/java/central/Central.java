@@ -97,7 +97,7 @@ public class Central extends Thread {
 
         if (messageArr == null) {
             System.out.println("\n\n_______________________ ERROR _______________________");
-            System.out.println("---------------- SENSOR NOT KNOWN ----------------");
+            System.out.println("---------------- SENSOR Unknown ----------------");
             System.out.println("______________________________________________________\n\n");
         } else {
             System.out.println("#######################################");
