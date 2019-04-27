@@ -24,6 +24,7 @@ public class Main {
                 sensors[i].simulate();
                 sensors[i].generateMessage();
                 sensors[i].send();
+                System.out.println("I SENT!");
                 try {
                     TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {
@@ -31,7 +32,6 @@ public class Main {
                 }
             }
         }
-        
         
     }
 }

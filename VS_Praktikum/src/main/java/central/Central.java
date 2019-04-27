@@ -64,8 +64,9 @@ public class Central extends Thread {
      * @return
      */
     public String[] processMessage() {
+        System.out.println("ProcessMessage!!!!!");
         String message = new String(datapacket.getData());
-        String browserdaten;
+        String browserdata;
         List<String> tmpList = new ArrayList<>();
 
         String[] messageArr = message.split("#");
@@ -74,14 +75,14 @@ public class Central extends Thread {
             return null;
         }
 
-        browserdaten = "Zentrale: " + centralID + " Sensortyp: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " am: " + messageArr[3];
+        browserdata = "Central: " + centralID + " Sensortype: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " @: " + messageArr[3];
 
         message = centralID + "#" + message; //+ zentraleID;
 
         if (sensorData.containsKey(messageArr[1])) {
-            sensorData.get(messageArr[1]).add(browserdaten);
+            sensorData.get(messageArr[1]).add(browserdata);
         } else {
-            tmpList.add(browserdaten);
+            tmpList.add(browserdata);
             sensorData.put(messageArr[1], tmpList);
         }
 
@@ -132,8 +133,7 @@ public class Central extends Thread {
     @Override
     public void run(){
         System.out.println("UDP-Server wurde gestartet.......");
-              
-        
+
         try{
             while(true){
                 receiveDP();
