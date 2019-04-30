@@ -30,11 +30,7 @@ public class RainSensor extends Sensor {
         double tmp = random.nextInt(6);
         tmp /= 10;
 
-        if (rain >= 13) {
-            rain -= 5;
-        } else {
-            rain += tmp;
-        }
+        rain += tmp;
 
         rain = Math.round(rain * 100) / 100.0;
         sensorValue = String.valueOf(rain) + "mm";

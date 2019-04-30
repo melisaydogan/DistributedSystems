@@ -21,20 +21,16 @@ public class WindSpeedSensor extends Sensor {
         SERVERADDRESS = address;
         SERVERPORT = port;
         sensorType = "Wind Speed";
-        speed = random.nextInt((49 - 20) + 1) + 20;    // integer zwischen 20 und 49
+        speed = random.nextInt(49); // Integer zwischen 0 und 49 (49= starker Wind)
     }
 
     @Override
     public void simulate() {
 
-        double tmp = random.nextInt(6); 
+        double tmp = random.nextInt(9);
         tmp /= 10;
 
-        if (speed >= 50) {
-            speed -= 25;
-        } else {
-            speed += tmp;
-        }
+        speed += tmp;
 
         speed = Math.round(speed * 100) / 100.0;
         sensorValue = String.valueOf(speed) + "km/h";

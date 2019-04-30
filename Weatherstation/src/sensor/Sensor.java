@@ -14,8 +14,9 @@ import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+import static java.lang.Thread.sleep;
+
 
 /**
  *
@@ -52,26 +53,34 @@ public abstract class Sensor {
     public void send() {
 
         try {
-            DatagramSocket dataSocket = new DatagramSocket();
+            DatagramSocket datasocket = new DatagramSocket();
             InetAddress serverAddress = InetAddress.getByName(SERVERADDRESS); //getByName('localhost')
-            DatagramPacket dataPacket = new DatagramPacket(buffer, buffer.length, serverAddress, SERVERPORT);
-            dataSocket.send(dataPacket);
+            DatagramPacket datapacket = new DatagramPacket(buffer, buffer.length, serverAddress, SERVERPORT);
+
+            while (true) {
+                datasocket.send(datapacket);
+      //          sleep(3000);
+
+            }
 
         } catch (SocketException ex) {
             //  Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Datagramsocket konnte nicht erstellt werden");
 
         } catch (UnknownHostException ex) {
-            // Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
+           //  Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Serveradresse konnte nicht aufgelöst werden");
 
         } catch (IOException ex) {
-            //  Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
+             // Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
             System.out.println("Paket konnte nicht geschickt werden");
 
-        } finally {
+        }  finally {
             datasocket.close();
-        }
+
+        } /*catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
     }
 
     public void setBuffer(byte[] buffer) {

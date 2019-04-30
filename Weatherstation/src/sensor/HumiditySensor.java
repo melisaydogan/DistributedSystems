@@ -30,11 +30,7 @@ public class HumiditySensor extends Sensor {
         double tmp = random.nextInt(9); // integer zwischen 0 und 9
         tmp /= 10;
 
-        if (humidity >= 80) {
-            humidity -= 25;
-        } else {
-            humidity += tmp;
-        }
+        humidity += tmp;
 
         humidity = Math.round(humidity * 100) / 100.0;
         sensorValue = String.valueOf(humidity) + "%";
