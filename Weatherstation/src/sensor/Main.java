@@ -18,7 +18,8 @@ public class Main {
         int serverport = 9997;
 
         // define and add sensors to array ..
-        Sensor[] sensors = {new TemperatureSensor(address, serverport)};
+        Sensor[] sensors = {new TemperatureSensor(address, serverport), new HumiditySensor(address, serverport), new RainSensor(address, serverport),
+                new WindSpeedSensor(address, serverport)};
         while (true) {
             for (int i = 0; i < sensors.length; i++) {
                 sensors[i].simulate();

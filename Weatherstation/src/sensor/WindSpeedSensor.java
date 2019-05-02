@@ -26,10 +26,8 @@ public class WindSpeedSensor extends Sensor {
 
     @Override
     public void simulate() {
-
         double tmp = random.nextInt(9);
         tmp /= 10;
-
         speed += tmp;
 
         speed = Math.round(speed * 100) / 100.0;
