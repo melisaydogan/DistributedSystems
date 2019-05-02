@@ -129,6 +129,12 @@ public class Weatherstation extends Thread {
         return SERVERPORT;
     }
 
+    public String getWeather(){
+        return actualWeather;
+    }
+    public String getZentraleid(){
+        return centralID;
+    }
     
      @Override
     public void run(){
