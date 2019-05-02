@@ -29,12 +29,12 @@ public class Weatherstation extends Thread {
     private final byte[] buffer = new byte[1024];
     Map<String, List<String>> sensorData = new HashMap<>();
     private Timestamp messageTime;
-    private final String centralID;// = UUID.randomUUID().toString();
+    private final String stationID;// = UUID.randomUUID().toString();
     private String actualWeather = " / Keine Wetterdaten verfuegbar";
 
     public Weatherstation() {
         SERVERPORT = 9997;
-        centralID = UUID.randomUUID().toString();
+        stationID = UUID.randomUUID().toString();
     }
 
     /**
@@ -76,9 +76,9 @@ public class Weatherstation extends Thread {
             return null;
         }
 
-        browserdata = "Central: " + centralID + " Sensortype: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " @: " + messageArr[3];
+        browserdata = "Station: " + stationID + " Sensortype: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " @: " + messageArr[3];
 
-        message = centralID + "#" + message; //+ zentraleID;
+        message = stationID + "#" + message; //+ stationID;
 
         if (sensorData.containsKey(messageArr[1])) {
             sensorData.get(messageArr[1]).add(browserdata);
@@ -133,7 +133,7 @@ public class Weatherstation extends Thread {
         return actualWeather;
     }
     public String getZentraleid(){
-        return centralID;
+        return stationID;
     }
     
      @Override
