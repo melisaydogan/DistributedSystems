@@ -3,6 +3,10 @@ package weatherstation;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
+/**
+ * Klasse, die TCP Verbindungen entgegen nimmt
+ */
 public class Http_Controller extends Thread {
     private final int SERVERPORT;
     private Weatherstation weatherstation;

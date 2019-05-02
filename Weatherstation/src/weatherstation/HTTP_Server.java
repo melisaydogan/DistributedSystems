@@ -26,6 +26,10 @@ public class HTTP_Server extends Thread {
         HERSTELLER_PORT = 0;
     }
 
+    /**
+     * Konstruktor bekommt Zentrale(Wetterstation) übergeben, um die generierten Sensordaten benutzen zu können
+     * bindet den Serverport
+     */
     public HTTP_Server(Weatherstation zentrale, Socket connectionSocket, String herstelleradresse, int herstellerport){
         this.weatherstation = zentrale;
         this.connectionSocket = connectionSocket;
@@ -40,6 +44,10 @@ public class HTTP_Server extends Thread {
         this.connectionSocket = connectionSocket;
     }
 
+    /**
+     * Nimmt Request Message vom Client entgegen und speichert die komplette Nachricht in einem Array
+     * @param inFromClient
+     */
     public void getReq(BufferedReader inFromClient){
         int pos = 0;
         try{
@@ -52,6 +60,10 @@ public class HTTP_Server extends Thread {
         }
     }
 
+    /**
+     *
+     * Verarbeitet den Request und bereitet angepassten Datensatz für prepareMessage vor
+     */
     public boolean editReq(){
 
         String[] tmp = reqMsgs[0].split(" ");
@@ -106,6 +118,10 @@ public class HTTP_Server extends Thread {
         return true;
     }
 
+    /**
+     * Schreibt angefragte Daten in eine HTML Nachricht
+     *
+     */
     public String prepareMessage(){
         String datensatz="";
         int iterator=0;
@@ -132,6 +148,10 @@ public class HTTP_Server extends Thread {
                 + "</p></body></html>";
     }
 
+    /**
+     * Sendet Nachricht an den TCP Clienten
+     * @param httpResponse
+     */
     public void sendMsg(String httpResponse){
         try {
             connectionSocket.getOutputStream().write(httpResponse.getBytes());
