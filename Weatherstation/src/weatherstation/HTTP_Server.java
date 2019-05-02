@@ -174,7 +174,7 @@ public class HTTP_Server extends Thread {
             String data;
             Socket clientSocket = new Socket(HERSTELLER_ADRESSE, HERSTELLER_PORT);
             //Socket clientSocket = new Socket("localhost", 5551);
-            clientSocket.getOutputStream().write((weatherstation.getZentraleid()+ "\n").getBytes());
+            clientSocket.getOutputStream().write((weatherstation.getStationid()+ "\n").getBytes());
 
             BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 

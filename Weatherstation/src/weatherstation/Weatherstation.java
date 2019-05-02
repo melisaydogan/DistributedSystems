@@ -132,7 +132,7 @@ public class Weatherstation extends Thread {
     public String getWeather(){
         return actualWeather;
     }
-    public String getZentraleid(){
+    public String getStationid(){
         return stationID;
     }
     
