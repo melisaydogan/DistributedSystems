@@ -53,15 +53,10 @@ public abstract class Sensor {
     public void send() {
 
         try {
-            DatagramSocket datasocket = new DatagramSocket();
+            datasocket = new DatagramSocket();
             InetAddress serverAddress = InetAddress.getByName(SERVERADDRESS); //getByName('localhost')
-            DatagramPacket datapacket = new DatagramPacket(buffer, buffer.length, serverAddress, SERVERPORT);
-
-            while (true) {
-                datasocket.send(datapacket);
-      //          sleep(3000);
-
-            }
+            datapacket = new DatagramPacket(buffer, buffer.length, serverAddress, SERVERPORT);
+            datasocket.send(datapacket);
 
         } catch (SocketException ex) {
             //  Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
