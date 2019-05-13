@@ -33,7 +33,6 @@ public class Http_Controller extends Thread {
     public void run(){
         System.out.println("HTTP Server wurde gestartet .......");
         while(true){
-
             try{
                 connectionSocket = welcomeSocket.accept();
                 new Thread(new HTTP_Server(weatherstation, connectionSocket, herstelleradresse, herstellerport)).start();

@@ -227,4 +227,26 @@ public class HTTP_Server extends Thread {
     public void setAnzahlDaten(int anzahl){
         anzahlSensorDaten = anzahl;
     }
+
+
+    @Override
+    public void run(){
+        System.out.println("HTTP Received");
+        try{
+            BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
+            getReq(inFromClient);
+            if(editReq())
+                sendMsg(prepareMessage());
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        finally{
+            try {
+                connectionSocket.close();
+            } catch (IOException ex) {
+                Logger.getLogger(HTTP_Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
 }

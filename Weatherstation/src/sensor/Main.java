@@ -15,17 +15,15 @@ public class Main {
 
     public static void main(String[] args) {
         String address = "localhost";
-        int serverport = 9997;
+        int serverport = 9991;
 
         // define and add sensors to array ..
-        Sensor[] sensors = {new TemperatureSensor(address, serverport), new HumiditySensor(address, serverport), new RainSensor(address, serverport),
-                new WindSpeedSensor(address, serverport)};
+        Sensor[] sensors = {new TemperatureSensor(address, serverport), new HumiditySensor(address, serverport), new RainSensor(address, serverport), new WindSpeedSensor(address, serverport)};
         while (true) {
             for (int i = 0; i < sensors.length; i++) {
                 sensors[i].simulate();
                 sensors[i].generateMessage();
                 sensors[i].send();
-                System.out.println("I SENT!");
                 try {
                     TimeUnit.SECONDS.sleep(2);
                 } catch (InterruptedException e) {

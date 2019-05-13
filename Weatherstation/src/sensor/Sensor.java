@@ -24,7 +24,7 @@ import static java.lang.Thread.sleep;
  */
 public abstract class Sensor {
 
-    protected int SERVERPORT; //= 9997; Port des Servers
+    protected int SERVERPORT; //= 9991; Port des Servers
     protected String SERVERADDRESS; // IP des Servers
     private DatagramSocket datasocket;
     private DatagramPacket datapacket;
@@ -57,6 +57,7 @@ public abstract class Sensor {
             InetAddress serverAddress = InetAddress.getByName(SERVERADDRESS); //getByName('localhost')
             datapacket = new DatagramPacket(buffer, buffer.length, serverAddress, SERVERPORT);
             datasocket.send(datapacket);
+            System.out.println("Socket sent on Port "+SERVERPORT);
 
         } catch (SocketException ex) {
             //  Logger.getLogger(Sensor.class.getName()).log(Level.SEVERE, null, ex);
@@ -77,6 +78,11 @@ public abstract class Sensor {
             e.printStackTrace();
         }*/
     }
+
+    public void getInformation(){
+        System.out.println("Send Information "+this.sensorType + "\n" + this.sensorValue + "\n");
+    }
+
 
     public void setBuffer(byte[] buffer) {
         this.buffer = buffer;

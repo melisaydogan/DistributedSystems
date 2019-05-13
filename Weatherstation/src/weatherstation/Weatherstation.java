@@ -33,7 +33,7 @@ public class Weatherstation extends Thread {
     private String actualWeather = " / Keine Wetterdaten verfuegbar";
 
     public Weatherstation() {
-        SERVERPORT = 9997;
+        SERVERPORT = 9991;
         stationID = UUID.randomUUID().toString();
     }
 
@@ -43,11 +43,12 @@ public class Weatherstation extends Thread {
      */
     public boolean receiveDP() {
         try {
-            datasocket = new DatagramSocket(SERVERPORT);
-            datapacket = new DatagramPacket(buffer, buffer.length);
+            //datasocket = new DatagramSocket(SERVERPORT);
+            //datapacket = new DatagramPacket(buffer, buffer.length);
 
             datasocket.receive(datapacket);
             messageTime = new Timestamp(System.currentTimeMillis());
+            System.out.println("Packet received!");
             return true;
 
         } catch (SocketException e) {
@@ -139,13 +140,17 @@ public class Weatherstation extends Thread {
      @Override
     public void run(){
         System.out.println("UDP-Server wurde gestartet.......");
-
         try{
+            datasocket = new DatagramSocket(SERVERPORT);
+            datapacket = new DatagramPacket(buffer, buffer.length);
             while(true){
                 receiveDP();
                 printMessage(processMessage());
 
-                Arrays.fill(buffer, (byte) 0);      
+                Arrays.fill(buffer, (byte) 0);
+                datasocket = new DatagramSocket(SERVERPORT);
+                datapacket = new DatagramPacket(buffer, buffer.length);
+
             }
         }
         catch(Exception e){
