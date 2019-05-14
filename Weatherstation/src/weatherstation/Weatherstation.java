@@ -28,9 +28,10 @@ public class Weatherstation extends Thread {
     private DatagramPacket datapacket;
     private final byte[] buffer = new byte[1024];
     Map<String, List<String>> sensorData = new HashMap<>();
+    Map<String, List<String>> sensorDataShort = new HashMap<>();
     private Timestamp messageTime;
     private final String stationID;// = UUID.randomUUID().toString();
-    private String actualWeather = " / Keine Wetterdaten verfuegbar";
+    private String actualWeather = " ";
 
     public Weatherstation() {
         SERVERPORT = 9991;
@@ -68,8 +69,9 @@ public class Weatherstation extends Thread {
     public String[] processMessage() {
         System.out.println("ProcessMessage!!!!!");
         String message = new String(datapacket.getData());
-        String browserdata;
+        String browserdata, browserdataShort;
         List<String> tmpList = new ArrayList<>();
+        List<String> tmpListShort = new ArrayList<>();
 
         String[] messageArr = message.split("#");
 
@@ -78,14 +80,18 @@ public class Weatherstation extends Thread {
         }
 
         browserdata = "Station: " + stationID + " Sensortype: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " @: " + messageArr[3];
+        browserdataShort = messageArr[1] + " " + messageArr[2] + " " + messageArr[3];
 
         message = stationID + "#" + message; //+ stationID;
 
         if (sensorData.containsKey(messageArr[1])) {
             sensorData.get(messageArr[1]).add(browserdata);
+            sensorDataShort.get(messageArr[1]).add(browserdataShort);
         } else {
             tmpList.add(browserdata);
+            tmpListShort.add((browserdataShort));
             sensorData.put(messageArr[1], tmpList);
+            sensorDataShort.put(messageArr[1], tmpListShort);
         }
 
         return messageArr;
@@ -120,6 +126,10 @@ public class Weatherstation extends Thread {
     
     public Map<String, List<String>> getSensorDatenMap(){
         return sensorData;
+    }
+
+    public Map<String, List<String>> getSensorDataShortMap(){
+        return sensorDataShort;
     }
     
     public Timestamp getZeitpunkt(){

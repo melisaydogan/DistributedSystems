@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -44,6 +45,14 @@ public class HTTP_Server extends Thread {
         this.connectionSocket = connectionSocket;
     }
 
+    public HTTP_Server(Weatherstation zentrale, Socket connectionSocket){
+        this.weatherstation = zentrale;
+        HERSTELLER_ADRESSE = null;
+        HERSTELLER_PORT = 0;
+        this.connectionSocket = connectionSocket;
+    }
+
+
     /**
      * Nimmt Request Message vom Client entgegen und speichert die komplette Nachricht in einem Array
      * @param inFromClient
@@ -54,6 +63,9 @@ public class HTTP_Server extends Thread {
             while((reqMsgs[pos]=inFromClient.readLine()) != null && reqMsgs[pos].length() != 0){
                 pos++;
             }
+            // Delete
+            Arrays.stream(reqMsgs).forEach(System.out::println);
+            System.out.println("------------------------");
         }
         catch(Exception e){
             System.out.println(e);
@@ -64,12 +76,12 @@ public class HTTP_Server extends Thread {
      *
      * Verarbeitet den Request und bereitet angepassten Datensatz für prepareMessage vor
      */
-    public boolean editReq(){
+    public void editReq(){
 
         String[] tmp = reqMsgs[0].split(" ");
         String[] splittedMsg = tmp[1].split("&");
         anzahlSensorDaten=-1;
-        Map<String, List<String>> sensorDaten = weatherstation.getSensorDatenMap();
+        Map<String, List<String>> sensorDaten = weatherstation.getSensorDataShortMap();
         angefragteDaten = new ArrayList<>();
         String sensorTyp="";
         headline="ANGEFORDERTER DATENSATZ: ";
@@ -80,7 +92,7 @@ public class HTTP_Server extends Thread {
         }
 
         //Nur GET Anfragen bearbeiten
-        if(!(tmp[0].equals("GET"))) return false;
+        if(!(tmp[0].equals("GET"))) return;
 
         if(splittedMsg[0].equals("/")) sensorTyp = "All";
         else{
@@ -93,7 +105,6 @@ public class HTTP_Server extends Thread {
             else sensorTyp = "none";
         }
 
-
         //Bestimmten Datensatz ausgeben
         if(sensorDaten.containsKey(sensorTyp)){
             headline = headline + sensorTyp;
@@ -103,19 +114,19 @@ public class HTTP_Server extends Thread {
         else if(sensorTyp.equals("All")){
             headline += "All";
 
-            sendMsg(prepHerstellerData(getHerstellerData()));
-
-            return false;
-
+            for(Map.Entry<String, List<String>> entry : sensorDaten.entrySet()) {
+                String key = entry.getKey();
+                for (String value : entry.getValue()) {
+                    angefragteDaten.add(value);
+                }
+            }
         }
         //Keine Datensätze gefunden
         else{
             headline += "UNBEKANNT";
-
         }
 
         headline = headline + " " + weatherstation.getWeather();
-        return true;
     }
 
     /**
@@ -136,16 +147,30 @@ public class HTTP_Server extends Thread {
             }
 
             for(;iterator<angefragteDaten.size();iterator++){
-                datensatz = datensatz + "<br>" + angefragteDaten.get(iterator);
+                String[] ary = angefragteDaten.get(iterator).split(" ");
+                //datensatz = datensatz + "<br>" + angefragteDaten.get(iterator);
+                datensatz = datensatz + "<tr>" +
+                        "<td style=\" width:30%;border-width:2px; text-align:center; border-style:ridge;border-color: black;\">"+ary[0]+"</td>\n" +
+                        "<td style=\" width:30%;border-width:2px; text-align:center; border-style:ridge;border-color: black;\">"+ary[1]+"</td>\n" +
+                        "<td style=\" width:30%;border-width:2px; text-align:center; border-style:ridge;border-color: black;\">"+ary[2]+" "+ary[3]+"</td></tr>";
             }
         }
 
+        String tableInit = "<table style=\"width:102%;background-color:grey;position: fixed;margin: 0em; font-size: 1.2em;font-weight: bold; margin:-1.4em;\"><tr>" +
+                "<th style=\" width:20%;border-width:2px; border-style:ridge;border-color: black;\">Sensortype</th>"
+                +"<th style=\" width:20%;border-width:2px; border-style:ridge;border-color: black;\">Value</th>"
+                +"<th style=\" width:20%;border-width:2px; border-style:ridge;border-color: black;\">Date</th> </tr> </table>"
+                +"<table style=\"width:103%; margin: -1.4em; border-width:1px; border-style:solid; border-color: black; background-color:#d0d0d0;font-weight: bold;\">";
+
+        String tableClose = "background-color:#d0d0d0;";
         //Leere Zeile nach HTTP Header
-        return "HTTP/1.1 200 OK\ncontent-Type:text/html\n\n"
+        return "HTTP/1.1 200 OK\ncontent-Type:text/html\r\n\r\n"
                 + "<html><head><title>Verteilte Systeme</title></head><body><p>"
-                + headline + "<br> ______________________________________________________________________________ <br><br>"
+                + headline
+                + "<br> ______________________________________________________________________________ <br><br>"
+                + tableInit
                 + datensatz
-                + "</p></body></html>";
+                + "</table></p></body></html>";
     }
 
     /**
@@ -158,54 +183,6 @@ public class HTTP_Server extends Thread {
         } catch (IOException ex) {
             Logger.getLogger(HTTP_Server.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    public String prepHerstellerData(String data){
-        String[] splitData = data.split("#");
-        headline = headline + " " + convertWeather(splitData[0].split("&"));
-        data = "";
-
-        for(int i=1;i<splitData.length;i++){
-            data = data + "<br>" + splitData[i];
-        }
-
-        return "HTTP/1.1 200 OK\ncontent-Type:text/html\n\n"
-                + "<html><head><title>Verteilte Systeme</title></head><body><p>"
-                + headline + "<br> ______________________________________________________________________________ <br><br>"
-                + data
-                + "</p></body></html>";
-    }
-
-    public String convertWeather(String[] weather){
-        if(weather.length != 4){
-            return null;
-        }
-
-        return " / Aktuelles Wetter fuer " + weather[0]
-                + " / Temperatur: " + weather[1]
-                + " C / min: " + weather[2]
-                + " C / max: " + weather[3]
-                + " C";
-    }
-
-    public String getHerstellerData(){
-        try {
-            StringBuffer buf = new StringBuffer();
-            String data;
-            Socket clientSocket = new Socket(HERSTELLER_ADRESSE, HERSTELLER_PORT);
-            //Socket clientSocket = new Socket("localhost", 5551);
-            clientSocket.getOutputStream().write((weatherstation.getStationid()+ "\n").getBytes());
-
-            BufferedReader bf = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-
-            data = bf.readLine();
-            bf.close();
-            return data;
-
-        } catch (IOException ex) {
-            Logger.getLogger(HTTP_Server.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
     }
 
     public void setReqMsgs(String[] reqMsgs){
@@ -235,8 +212,10 @@ public class HTTP_Server extends Thread {
         try{
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             getReq(inFromClient);
-            if(editReq())
-                sendMsg(prepareMessage());
+            editReq();
+
+            //System.out.println(prepareMessage());
+            sendMsg(prepareMessage());
         }
         catch(Exception e){
             System.out.println(e);

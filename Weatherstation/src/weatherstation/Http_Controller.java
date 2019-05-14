@@ -35,7 +35,7 @@ public class Http_Controller extends Thread {
         while(true){
             try{
                 connectionSocket = welcomeSocket.accept();
-                new Thread(new HTTP_Server(weatherstation, connectionSocket, herstelleradresse, herstellerport)).start();
+                new Thread(new HTTP_Server(weatherstation, connectionSocket)).start();
             }
             catch(Exception e){
                 e.printStackTrace();
