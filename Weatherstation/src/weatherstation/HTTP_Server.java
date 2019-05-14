@@ -63,8 +63,12 @@ public class HTTP_Server extends Thread {
             while((reqMsgs[pos]=inFromClient.readLine()) != null && reqMsgs[pos].length() != 0){
                 pos++;
             }
-            // Delete
-            Arrays.stream(reqMsgs).forEach(System.out::println);
+
+            // Print incoming request
+            for(int i =0;i<reqMsgs.length;i++){
+                if(reqMsgs[i]!=null && !reqMsgs[i].isEmpty())
+                    System.out.println(reqMsgs[i]);
+            }
             System.out.println("------------------------");
         }
         catch(Exception e){
@@ -162,7 +166,6 @@ public class HTTP_Server extends Thread {
                 +"<th style=\" width:20%;border-width:2px; border-style:ridge;border-color: black;\">Date</th> </tr> </table>"
                 +"<table style=\"width:103%; margin: -1.4em; border-width:1px; border-style:solid; border-color: black; background-color:#d0d0d0;font-weight: bold;\">";
 
-        String tableClose = "background-color:#d0d0d0;";
         //Leere Zeile nach HTTP Header
         return "HTTP/1.1 200 OK\ncontent-Type:text/html\r\n\r\n"
                 + "<html><head><title>Verteilte Systeme</title></head><body><p>"

@@ -29,6 +29,20 @@ public class Http_Controller extends Thread {
         }
     }
 
+    public Http_Controller(Weatherstation weatherstation){
+        this.weatherstation = weatherstation;
+        SERVERPORT = this.weatherstation.getPort();
+
+        this.herstelleradresse = null;
+        this.herstellerport = 0;
+        try{
+            welcomeSocket = new ServerSocket(SERVERPORT);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void run(){
         System.out.println("HTTP Server wurde gestartet .......");

@@ -20,7 +20,7 @@ public class WindSpeedSensor extends Sensor {
 
         SERVERADDRESS = address;
         SERVERPORT = port;
-        sensorType = "WindSpeed";
+        sensorType = "Windspeed";
         speed = random.nextInt(49); // Integer zwischen 0 und 49 (49= starker Wind)
     }
 

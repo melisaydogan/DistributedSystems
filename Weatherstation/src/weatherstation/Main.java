@@ -13,10 +13,11 @@ public class Main {
 
     public static void main(String[] args) {
         Weatherstation weatherstation = new Weatherstation();
-        String herstelleradresse = "localhost";
-        int herstellerport = 5551;
+        //String herstelleradresse = "localhost";
+        //int herstellerport = 5551;
 
-        Http_Controller http_controller = new Http_Controller(weatherstation, herstelleradresse, herstellerport);
+        //Http_Controller http_controller = new Http_Controller(weatherstation, herstelleradresse, herstellerport);
+        Http_Controller http_controller = new Http_Controller(weatherstation);
 
         weatherstation.start();
         http_controller.start();
