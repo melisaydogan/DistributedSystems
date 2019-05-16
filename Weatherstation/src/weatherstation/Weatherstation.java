@@ -27,8 +27,8 @@ public class Weatherstation extends Thread {
     private DatagramSocket datasocket;
     private DatagramPacket datapacket;
     private final byte[] buffer = new byte[1024];
-    Map<String, List<String>> sensorData = new HashMap<>();
-    Map<String, List<String>> sensorDataShort = new HashMap<>();
+    Map<String, List<String>> sensorData = new HashMap<>();          //key: sensortyp, value: liste aller Werte zum Sensortyp
+    Map<String, List<String>> sensorDataShort = new HashMap<>();    //key: sensortyp, value: liste aller Werte zum Sensortyp
     private Timestamp messageTime;
     private final String stationID;// = UUID.randomUUID().toString();
     private String actualWeather = " ";

@@ -15,6 +15,7 @@ public class Http_Controller extends Thread {
     private String herstelleradresse;
     private int herstellerport;
 
+    /*
     public Http_Controller(Weatherstation weatherstation, String herstelleradresse, int herstellerport){
         this.weatherstation = weatherstation;
         SERVERPORT = this.weatherstation.getPort();
@@ -29,12 +30,18 @@ public class Http_Controller extends Thread {
         }
     }
 
+     */
+
     public Http_Controller(Weatherstation weatherstation){
         this.weatherstation = weatherstation;
+
+
         SERVERPORT = this.weatherstation.getPort();
 
         this.herstelleradresse = null;
         this.herstellerport = 0;
+
+        // Port festlegen, auf den der Serversocket hören soll
         try{
             welcomeSocket = new ServerSocket(SERVERPORT);
         }
@@ -48,6 +55,9 @@ public class Http_Controller extends Thread {
         System.out.println("HTTP Server wurde gestartet .......");
         while(true){
             try{
+
+                // sobald man auf localhost:9991 geht, wird neuer Thread erzeugt (neuer Http-server erzeugt
+                // mit Wetterstation und connectionSocket=welcomeSocket)
                 connectionSocket = welcomeSocket.accept();
                 new Thread(new HTTP_Server(weatherstation, connectionSocket)).start();
             }

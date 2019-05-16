@@ -12,6 +12,7 @@ package weatherstation;
 public class Main {
 
     public static void main(String[] args) {
+
         Weatherstation weatherstation = new Weatherstation();
         //String herstelleradresse = "localhost";
         //int herstellerport = 5551;
@@ -20,6 +21,8 @@ public class Main {
         Http_Controller http_controller = new Http_Controller(weatherstation);
 
         weatherstation.start();
+
+        // HTTP-Controller wird gestartet
         http_controller.start();
     }
 }

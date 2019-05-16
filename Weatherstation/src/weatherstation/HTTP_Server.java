@@ -59,11 +59,12 @@ public class HTTP_Server extends Thread {
     public void getReq(BufferedReader inFromClient){
         int pos = 0;
         try{
+            //alles was in inFromClient drin ist (also die http-anfrage), wird in reqMsgs-Array gespeichert
             while((reqMsgs[pos]=inFromClient.readLine()) != null && reqMsgs[pos].length() != 0){
                 pos++;
             }
 
-            // Print incoming request
+            // http-anfrage wird ausgegeben
             for(int i =0;i<reqMsgs.length;i++){
                 if(reqMsgs[i]!=null && !reqMsgs[i].isEmpty())
                     System.out.println(reqMsgs[i]);
@@ -94,9 +95,10 @@ public class HTTP_Server extends Thread {
             anzahlSensorDaten = Integer.parseInt(splittedMsg[1]);
         }
 
-        //Nur GET Anfragen bearbeiten
+        //schaut, ob es eine get-anfrage ist (weil NUR get-anfragen)
         if(!(tmp[0].equals("GET"))) return;
 
+        // schaut ob es sich um localhost:9991 handelt, oder zB um localhost:9991/temperature (key)
         if(splittedMsg[0].equals("/")) sensorTyp = "All";
         else{
             splittedMsg[0] = splittedMsg[0].substring(1);
@@ -120,6 +122,8 @@ public class HTTP_Server extends Thread {
             for(Map.Entry<String, List<String>> entry : sensorDaten.entrySet()) {
                 String key = entry.getKey();
                 for (String value : entry.getValue()) {
+
+                    //einträge (sensordaten) werden in angefragteDaten abgespeichert
                     angefragteDaten.add(value);
                 }
             }
@@ -149,6 +153,7 @@ public class HTTP_Server extends Thread {
                 if(iterator<0) iterator =0;
             }
 
+            //Seite aufgebaut (Tabelle)
             for(;iterator<angefragteDaten.size();iterator++){
                 String[] ary = angefragteDaten.get(iterator).split(" ");
                 //datensatz = datensatz + "<br>" + angefragteDaten.get(iterator);
@@ -212,6 +217,8 @@ public class HTTP_Server extends Thread {
     public void run(){
         System.out.println("HTTP Received");
         try{
+
+            //von connectionSocket den InputStream nehmen und in inFromClient abspeichern
             BufferedReader inFromClient = new BufferedReader(new InputStreamReader(connectionSocket.getInputStream()));
             getReq(inFromClient);
             editReq();
