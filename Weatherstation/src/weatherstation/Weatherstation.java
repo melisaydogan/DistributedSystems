@@ -73,6 +73,7 @@ public class Weatherstation extends Thread {
         List<String> tmpList = new ArrayList<>();
         List<String> tmpListShort = new ArrayList<>();
 
+        // messageArr zerlegen
         String[] messageArr = message.split("#");
 
         if (messageArr.length != 5) {
@@ -81,6 +82,7 @@ public class Weatherstation extends Thread {
 
         browserdata = "Station: " + stationID + " Sensortype: " + messageArr[1] + "(" + messageArr[0] + ") " + ": " + messageArr[2] + " @: " + messageArr[3];
         browserdataShort = messageArr[1] + " " + messageArr[2] + " " + messageArr[3];
+
 
         message = stationID + "#" + message; //+ stationID;
 
@@ -157,7 +159,9 @@ public class Weatherstation extends Thread {
                 receiveDP();
                 printMessage(processMessage());
 
+                // damit messageArr != 0
                 Arrays.fill(buffer, (byte) 0);
+
                 datasocket = new DatagramSocket(SERVERPORT);
                 datapacket = new DatagramPacket(buffer, buffer.length);
 

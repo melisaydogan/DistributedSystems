@@ -30,8 +30,10 @@ public class HTTP_Server extends Thread {
      * Konstruktor bekommt Zentrale(Wetterstation) übergeben, um die generierten Sensordaten benutzen zu können
      * bindet den Serverport
      */
-    public HTTP_Server(Weatherstation zentrale, Socket connectionSocket, String herstelleradresse, int herstellerport){
-        this.weatherstation = zentrale;
+
+    /*
+    public HTTP_Server(Weatherstation weatherstation, Socket connectionSocket, String herstelleradresse, int herstellerport){
+        this.weatherstation = weatherstation;
         this.connectionSocket = connectionSocket;
         HERSTELLER_ADRESSE = herstelleradresse;
         HERSTELLER_PORT = herstellerport;
@@ -43,9 +45,10 @@ public class HTTP_Server extends Thread {
         HERSTELLER_PORT = 0;
         this.connectionSocket = connectionSocket;
     }
+     */
 
-    public HTTP_Server(Weatherstation zentrale, Socket connectionSocket){
-        this.weatherstation = zentrale;
+    public HTTP_Server(Weatherstation weatherstation, Socket connectionSocket){
+        this.weatherstation = weatherstation;
         HERSTELLER_ADRESSE = null;
         HERSTELLER_PORT = 0;
         this.connectionSocket = connectionSocket;
@@ -81,7 +84,6 @@ public class HTTP_Server extends Thread {
      * Verarbeitet den Request und bereitet angepassten Datensatz für prepareMessage vor
      */
     public void editReq(){
-
         String[] tmp = reqMsgs[0].split(" ");
         String[] splittedMsg = tmp[1].split("&");
         anzahlSensorDaten=-1;
@@ -192,6 +194,7 @@ public class HTTP_Server extends Thread {
         }
     }
 
+    /*
     public void setReqMsgs(String[] reqMsgs){
         this.reqMsgs = reqMsgs;
     }
@@ -211,6 +214,8 @@ public class HTTP_Server extends Thread {
     public void setAnzahlDaten(int anzahl){
         anzahlSensorDaten = anzahl;
     }
+
+     */
 
 
     @Override
